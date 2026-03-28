@@ -1,0 +1,9 @@
+{
+	"id": "media-review",
+	"name": "Media Review",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Review, compress, and batch rename media attachments in your vault.",
+	"author": "Ramon",
+	"isDesktopOnly": false
+}

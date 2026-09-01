@@ -34,7 +34,7 @@ Run **Batch rename attachments** from the command palette.
 - **Prefix**: Add a shared prefix to selected files (e.g. "My Topic")
 - **Two suffix modes**:
   - **Keep original name**: `abcd.jpg` becomes `My Topic abcd.jpg`
-  - **Generate numbers**: Files become `My Topic 001.jpg`, `My Topic 002.jpg`, etc.
+  - **Generate numbers** (default): Files become `My Topic 001.jpg`, `My Topic 002.jpg`, etc.
 - **Live preview**: See old name -> new name for all selected files before confirming
 - **Conflict detection**: Checks for naming collisions before executing
 - **Link-safe**: Uses Obsidian's `fileManager.renameFile()` so all `![[...]]` references update automatically

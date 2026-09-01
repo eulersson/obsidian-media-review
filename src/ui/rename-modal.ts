@@ -9,7 +9,7 @@ export class RenameModal extends Modal {
 	private mediaFiles: MediaFile[] = [];
 	private selected: Set<string> = new Set();
 	private prefix = '';
-	private suffixMode: SuffixMode = 'keep-name';
+	private suffixMode: SuffixMode = 'generate-numbers';
 	private listEl: HTMLElement | null = null;
 	private previewEl: HTMLElement | null = null;
 

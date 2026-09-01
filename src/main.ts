@@ -24,12 +24,14 @@ export default class MediaReviewPlugin extends Plugin {
 		this.addCommand({
 			id: 'compress-media',
 			name: 'Compress media',
+			icon: 'shrink',
 			callback: () => new CompressModal(this.app, this).open(),
 		});
 
 		this.addCommand({
 			id: 'batch-rename',
 			name: 'Batch rename attachments',
+			icon: 'folder-pen',
 			callback: () => new RenameModal(this.app, this).open(),
 		});
 

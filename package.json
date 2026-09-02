@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-media-review",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Review, compress, and batch rename media attachments in your vault.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

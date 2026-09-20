@@ -10,6 +10,8 @@ export interface MediaReviewSettings {
 	videoPreset: VideoPreset;
 	videoAudioBitrate: string;
 	videoMaxHeight: number;
+	audioBitrate: string;
+	audioMono: boolean;
 	ffmpegPath: string;
 }
 
@@ -21,6 +23,8 @@ export const DEFAULT_SETTINGS: MediaReviewSettings = {
 	videoPreset: 'slow',
 	videoAudioBitrate: '128k',
 	videoMaxHeight: 720,
+	audioBitrate: '192k',
+	audioMono: true,
 	ffmpegPath: '',
 };
 
@@ -132,9 +136,38 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
+		containerEl.createEl('h3', { text: 'Audio compression defaults' });
+
+		new Setting(containerEl)
+			.setName('Bitrate')
+			.setDesc('MP3 bitrate. Audio files (M4A, MP3, WAV) are always converted to MP3.')
+			.addDropdown(dd => dd
+				.addOption('96k', '96k')
+				.addOption('128k', '128k')
+				.addOption('192k', '192k (recommended)')
+				.addOption('256k', '256k')
+				.addOption('320k', '320k')
+				.setValue(this.plugin.settings.audioBitrate)
+				.onChange(async (value) => {
+					this.plugin.settings.audioBitrate = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Mono')
+			.setDesc('Downmix to a single channel. Good for voice recordings.')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.audioMono)
+				.onChange(async (value) => {
+					this.plugin.settings.audioMono = value;
+					await this.plugin.saveSettings();
+				}));
+
+		containerEl.createEl('h3', { text: 'External tools' });
+
 		new Setting(containerEl)
 			.setName('ffmpeg path')
-			.setDesc('Path to ffmpeg binary. Leave empty for auto-detection.')
+			.setDesc('Path to ffmpeg binary, used for video and audio compression. Leave empty for auto-detection.')
 			.addText(text => text
 				.setPlaceholder('/usr/local/bin/ffmpeg')
 				.setValue(this.plugin.settings.ffmpegPath)

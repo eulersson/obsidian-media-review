@@ -1,5 +1,5 @@
 import { App, TFile } from 'obsidian';
-import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, ALL_MEDIA_EXTENSIONS } from '../constants';
+import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, AUDIO_EXTENSIONS, ALL_MEDIA_EXTENSIONS } from '../constants';
 import { MediaFile } from '../types';
 
 export function getMediaFiles(app: App, extensions?: string[]): MediaFile[] {
@@ -20,6 +20,7 @@ function toMediaFile(file: TFile): MediaFile {
 		mtime: file.stat.mtime,
 		isImage: IMAGE_EXTENSIONS.includes(ext),
 		isVideo: VIDEO_EXTENSIONS.includes(ext),
+		isAudio: AUDIO_EXTENSIONS.includes(ext),
 	};
 }
 

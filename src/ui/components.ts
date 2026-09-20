@@ -23,7 +23,11 @@ export function createFileRow(
 		thumb.alt = mediaFile.name;
 	} else {
 		const icon = row.createDiv({ cls: 'media-review-icon' });
-		icon.setText(mediaFile.isVideo ? '\uD83C\uDFA5' : '\uD83D\uDDBC\uFE0F');
+		icon.setText(
+			mediaFile.isVideo ? '\uD83C\uDFA5'
+				: mediaFile.isAudio ? '\uD83C\uDFB5'
+					: '\uD83D\uDDBC\uFE0F',
+		);
 	}
 
 	const info = row.createDiv({ cls: 'media-review-file-info' });

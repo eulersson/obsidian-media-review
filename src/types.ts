@@ -8,6 +8,7 @@ export interface MediaFile {
 	mtime: number;
 	isImage: boolean;
 	isVideo: boolean;
+	isAudio: boolean;
 }
 
 export type OutputFormat = 'jpeg' | 'webp' | 'png' | 'keep';
@@ -25,6 +26,11 @@ export interface VideoCompressionOptions {
 	preset: VideoPreset;
 	audioBitrate: string;  // e.g. '128k'
 	maxHeight: number;     // 0 = no scaling, 720, 1080, etc.
+}
+
+export interface AudioCompressionOptions {
+	bitrate: string;       // e.g. '192k'
+	mono: boolean;         // downmix to a single channel
 }
 
 export type SuffixMode = 'keep-name' | 'generate-numbers';

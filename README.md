@@ -27,6 +27,15 @@ Switch to **Videos** mode in the compress modal (requires ffmpeg installed on yo
 - **Web-optimized output**: Always outputs MP4 with `yuv420p` pixel format and `+faststart` for progressive web playback
 - **Auto format conversion**: Non-MP4 sources (MOV, AVI, MKV, WebM) are converted to MP4 with vault links updated
 
+### Audio compression
+
+Switch to **Audio** mode in the compress modal (requires ffmpeg installed on your system).
+
+- **Bitrate**: MP3 bitrate (96k to 320k, default 192k)
+- **Mono**: Downmix to a single channel (default on) -- ideal for voice memos
+- **Always MP3**: M4A and WAV sources are converted to MP3 with vault links updated; MP3 sources are re-encoded in place
+- Equivalent to `ffmpeg -i input -b:a 192k -ac 1 output.mp3`
+
 ### Batch rename
 
 Run **Batch rename attachments** from the command palette.
@@ -51,7 +60,7 @@ Run **Batch rename attachments** from the command palette.
 ## Requirements
 
 - **Image compression**: Works on all platforms. Best quality on desktop with [ImageMagick](https://imagemagick.org/) installed (`brew install imagemagick` on macOS)
-- **Video compression**: Desktop only. Requires [ffmpeg](https://ffmpeg.org/) installed (`brew install ffmpeg` on macOS)
+- **Video and audio compression**: Desktop only. Requires [ffmpeg](https://ffmpeg.org/) installed (`brew install ffmpeg` on macOS)
 - Both tools are auto-detected at plugin load. Custom paths can be set in the settings tab.
 
 ## Installation

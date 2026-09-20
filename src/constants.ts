@@ -1,6 +1,7 @@
 export const IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'avif'];
 export const VIDEO_EXTENSIONS = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
-export const ALL_MEDIA_EXTENSIONS = [...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS];
+export const AUDIO_EXTENSIONS = ['m4a', 'mp3', 'wav'];
+export const ALL_MEDIA_EXTENSIONS = [...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS, ...AUDIO_EXTENSIONS];
 
 // Extensions that should not be compressed via canvas (animation/vector)
 export const SKIP_COMPRESSION_EXTENSIONS = ['gif', 'svg'];

@@ -1,13 +1,19 @@
 import { App, Modal, Notice, Setting, TFile } from 'obsidian';
 import type MediaReviewPlugin from '../main';
-import type { CompressionOptions, MediaFile, OutputFormat, VideoCompressionOptions, VideoPreset } from '../types';
-import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from '../constants';
+import type { AudioCompressionOptions, CompressionOptions, MediaFile, OutputFormat, VideoCompressionOptions, VideoPreset } from '../types';
 import { getMediaFiles, formatFileSize } from '../utils/files';
 import { compressImage, canCompress } from '../compression/image';
 import { compressVideo } from '../compression/video';
+import { compressAudio } from '../compression/audio';
 import { createPaginatedFileList, createSelectAllBar, createProgressBar, setAllCheckboxes } from './components';
 
-type Mode = 'images' | 'videos';
+type Mode = 'images' | 'videos' | 'audio';
+
+const MODES: { mode: Mode; label: string; needsFfmpeg: boolean }[] = [
+	{ mode: 'images', label: 'Images', needsFfmpeg: false },
+	{ mode: 'videos', label: 'Videos', needsFfmpeg: true },
+	{ mode: 'audio', label: 'Audio', needsFfmpeg: true },
+];
 
 export class CompressModal extends Modal {
 	private plugin: MediaReviewPlugin;
@@ -19,6 +25,7 @@ export class CompressModal extends Modal {
 	private selectBarEl: HTMLElement | null = null;
 	private imageOptions: CompressionOptions;
 	private videoOptions: VideoCompressionOptions;
+	private audioOptions: AudioCompressionOptions;
 
 	// Quality UI refs for reactive enable/disable
 	private qualitySetting: Setting | null = null;
@@ -38,6 +45,10 @@ export class CompressModal extends Modal {
 			audioBitrate: plugin.settings.videoAudioBitrate,
 			maxHeight: plugin.settings.videoMaxHeight,
 		};
+		this.audioOptions = {
+			bitrate: plugin.settings.audioBitrate,
+			mono: plugin.settings.audioMono,
+		};
 	}
 
 	onOpen(): void {
@@ -49,34 +60,30 @@ export class CompressModal extends Modal {
 
 		// Mode toggle
 		const toggleBar = contentEl.createDiv({ cls: 'media-review-mode-toggle' });
-		const imgBtn = toggleBar.createEl('button', { text: 'Images', cls: 'media-review-mode-btn is-active' });
-		const vidBtn = toggleBar.createEl('button', { text: 'Videos', cls: 'media-review-mode-btn' });
+		const modeBtns: HTMLButtonElement[] = [];
 
-		if (!this.plugin.ffmpegPath) {
-			vidBtn.disabled = true;
-			vidBtn.title = 'ffmpeg not found';
-			vidBtn.addClass('media-review-mode-btn-disabled');
+		for (const { mode, label, needsFfmpeg } of MODES) {
+			const btn = toggleBar.createEl('button', { text: label, cls: 'media-review-mode-btn' });
+			btn.toggleClass('is-active', mode === this.mode);
+			modeBtns.push(btn);
+
+			const unavailable = needsFfmpeg && !this.plugin.ffmpegPath;
+			if (unavailable) {
+				btn.disabled = true;
+				btn.title = 'ffmpeg not found';
+				btn.addClass('media-review-mode-btn-disabled');
+			}
+
+			btn.addEventListener('click', () => {
+				if (this.mode === mode || unavailable) return;
+				this.mode = mode;
+				modeBtns.forEach(b => b.removeClass('is-active'));
+				btn.addClass('is-active');
+				this.selected.clear();
+				this.rebuildOptions();
+				this.renderFileList();
+			});
 		}
-
-		imgBtn.addEventListener('click', () => {
-			if (this.mode === 'images') return;
-			this.mode = 'images';
-			imgBtn.addClass('is-active');
-			vidBtn.removeClass('is-active');
-			this.selected.clear();
-			this.rebuildOptions();
-			this.renderFileList();
-		});
-
-		vidBtn.addEventListener('click', () => {
-			if (this.mode === 'videos' || !this.plugin.ffmpegPath) return;
-			this.mode = 'videos';
-			vidBtn.addClass('is-active');
-			imgBtn.removeClass('is-active');
-			this.selected.clear();
-			this.rebuildOptions();
-			this.renderFileList();
-		});
 
 		// Options container (rebuilt on mode switch)
 		this.optionsEl = contentEl.createDiv({ cls: 'media-review-options' });
@@ -120,8 +127,10 @@ export class CompressModal extends Modal {
 
 		if (this.mode === 'images') {
 			this.buildImageOptions(this.optionsEl);
-		} else {
+		} else if (this.mode === 'videos') {
 			this.buildVideoOptions(this.optionsEl);
+		} else {
+			this.buildAudioOptions(this.optionsEl);
 		}
 	}
 
@@ -214,6 +223,31 @@ export class CompressModal extends Modal {
 			});
 	}
 
+	private buildAudioOptions(el: HTMLElement): void {
+		new Setting(el)
+			.setName('Bitrate')
+			.setDesc('Output is always MP3')
+			.addDropdown(dd => dd
+				.addOption('96k', '96k')
+				.addOption('128k', '128k')
+				.addOption('192k', '192k (recommended)')
+				.addOption('256k', '256k')
+				.addOption('320k', '320k')
+				.setValue(this.audioOptions.bitrate)
+				.onChange(value => {
+					this.audioOptions.bitrate = value;
+				}));
+
+		new Setting(el)
+			.setName('Mono')
+			.setDesc('Downmix to a single channel')
+			.addToggle(toggle => toggle
+				.setValue(this.audioOptions.mono)
+				.onChange(value => {
+					this.audioOptions.mono = value;
+				}));
+	}
+
 	private updateQualityState(): void {
 		const isPng = this.imageOptions.outputFormat === 'png';
 		const isKeep = this.imageOptions.outputFormat === 'keep';
@@ -243,7 +277,8 @@ export class CompressModal extends Modal {
 
 		const files = this.mediaFiles.filter(mf => {
 			if (this.mode === 'images') return mf.isImage && canCompress(mf.extension);
-			return mf.isVideo;
+			if (this.mode === 'videos') return mf.isVideo;
+			return mf.isAudio;
 		});
 
 		createPaginatedFileList(
@@ -294,10 +329,13 @@ export class CompressModal extends Modal {
 						`${mf.name}: ${formatFileSize(result.originalSize)} \u2192 ${formatFileSize(result.newSize)} (saved ${formatFileSize(saved)})`,
 					);
 
-				} else if (this.mode === 'videos' && mf.isVideo && this.plugin.ffmpegPath) {
-					const result = await compressVideo(
-						this.app, mf.file, this.videoOptions, this.plugin.ffmpegPath,
-					);
+				} else if (
+					((this.mode === 'videos' && mf.isVideo) || (this.mode === 'audio' && mf.isAudio))
+					&& this.plugin.ffmpegPath
+				) {
+					const result = this.mode === 'videos'
+						? await compressVideo(this.app, mf.file, this.videoOptions, this.plugin.ffmpegPath)
+						: await compressAudio(this.app, mf.file, this.audioOptions, this.plugin.ffmpegPath);
 
 					if (result.newSize >= result.originalSize) {
 						new Notice(`Skipped "${mf.name}" - compressed file is not smaller.`);

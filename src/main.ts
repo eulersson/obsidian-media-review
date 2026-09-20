@@ -39,7 +39,13 @@ export default class MediaReviewPlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<MediaReviewSettings>);
+		const data = await this.loadData() as Partial<MediaReviewSettings> & { videoMaxHeight?: number };
+		// Pre-0.x setting: the cap used to apply to height only, now to the shorter edge.
+		if (data?.videoMaxHeight !== undefined && data.videoMaxShortEdge === undefined) {
+			data.videoMaxShortEdge = data.videoMaxHeight;
+			delete data.videoMaxHeight;
+		}
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 	}
 
 	async saveSettings(): Promise<void> {

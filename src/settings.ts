@@ -9,7 +9,7 @@ export interface MediaReviewSettings {
 	videoCrf: number;
 	videoPreset: VideoPreset;
 	videoAudioBitrate: string;
-	videoMaxHeight: number;
+	videoMaxShortEdge: number;
 	audioBitrate: string;
 	audioMono: boolean;
 	ffmpegPath: string;
@@ -22,7 +22,7 @@ export const DEFAULT_SETTINGS: MediaReviewSettings = {
 	videoCrf: 23,
 	videoPreset: 'slow',
 	videoAudioBitrate: '128k',
-	videoMaxHeight: 720,
+	videoMaxShortEdge: 720,
 	audioBitrate: '192k',
 	audioMono: true,
 	ffmpegPath: '',
@@ -112,16 +112,16 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Max height')
-			.setDesc('Scale videos taller than this (e.g. 720 for 720p, 1080 for 1080p). 0 = no scaling.')
+			.setName('Max resolution')
+			.setDesc('Cap the shorter edge of the video — height for landscape, width for portrait. 0 = no scaling.')
 			.addDropdown(dd => dd
 				.addOption('0', 'No scaling')
 				.addOption('480', '480p')
 				.addOption('720', '720p (recommended)')
 				.addOption('1080', '1080p')
-				.setValue(String(this.plugin.settings.videoMaxHeight))
+				.setValue(String(this.plugin.settings.videoMaxShortEdge))
 				.onChange(async (value) => {
-					this.plugin.settings.videoMaxHeight = parseInt(value, 10);
+					this.plugin.settings.videoMaxShortEdge = parseInt(value, 10);
 					await this.plugin.saveSettings();
 				}));
 

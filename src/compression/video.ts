@@ -31,10 +31,17 @@ export async function compressVideo(
 		'-movflags', '+faststart',
 	];
 
-	// Scale down if maxHeight is set
-	if (options.maxHeight > 0) {
-		// -2 ensures width is divisible by 2 (required by libx264)
-		args.push('-vf', `scale=-2:min'(${options.maxHeight},ih)'`);
+	// Scale down if a short-edge cap is set. The cap applies to the shorter edge:
+	// height for landscape, width for portrait — so 720 means 720p either way.
+	// -2 lets the other edge follow the aspect ratio, rounded to a multiple of 2
+	// (required by libx264). Expressions are quoted so their commas aren't read as
+	// filtergraph separators.
+	if (options.maxShortEdge > 0) {
+		const cap = options.maxShortEdge;
+		args.push(
+			'-vf',
+			`scale='if(gt(iw,ih),-2,min(${cap},iw))':'if(gt(iw,ih),min(${cap},ih),-2)'`,
+		);
 	}
 
 	args.push('-y', tempOutput);

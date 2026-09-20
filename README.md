@@ -22,7 +22,7 @@ Switch to **Videos** mode in the compress modal (requires ffmpeg installed on yo
 
 - **CRF quality**: Constant rate factor slider (0-51, default 23 -- high quality for web)
 - **Encoding preset**: Speed vs compression tradeoff (veryfast to veryslow, default slow)
-- **Resolution scaling**: Downscale to 480p, 720p, or 1080p (default 720p)
+- **Resolution scaling**: Downscale to 480p, 720p, or 1080p (default 720p). The cap applies to the shorter edge, so portrait videos are capped on width and landscape ones on height
 - **Audio bitrate**: AAC audio quality (default 128k)
 - **Web-optimized output**: Always outputs MP4 with `yuv420p` pixel format and `+faststart` for progressive web playback
 - **Auto format conversion**: Non-MP4 sources (MOV, AVI, MKV, WebM) are converted to MP4 with vault links updated

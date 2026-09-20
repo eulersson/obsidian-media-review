@@ -43,7 +43,7 @@ export class CompressModal extends Modal {
 			crf: plugin.settings.videoCrf,
 			preset: plugin.settings.videoPreset,
 			audioBitrate: plugin.settings.videoAudioBitrate,
-			maxHeight: plugin.settings.videoMaxHeight,
+			maxShortEdge: plugin.settings.videoMaxShortEdge,
 		};
 		this.audioOptions = {
 			bitrate: plugin.settings.audioBitrate,
@@ -207,9 +207,9 @@ export class CompressModal extends Modal {
 				.addOption('480', '480p')
 				.addOption('720', '720p (recommended)')
 				.addOption('1080', '1080p')
-				.setValue(String(this.videoOptions.maxHeight))
+				.setValue(String(this.videoOptions.maxShortEdge))
 				.onChange(value => {
-					this.videoOptions.maxHeight = parseInt(value, 10);
+					this.videoOptions.maxShortEdge = parseInt(value, 10);
 				}));
 
 		new Setting(el)

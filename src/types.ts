@@ -25,7 +25,7 @@ export interface VideoCompressionOptions {
 	crf: number;           // 0-51
 	preset: VideoPreset;
 	audioBitrate: string;  // e.g. '128k'
-	maxHeight: number;     // 0 = no scaling, 720, 1080, etc.
+	maxShortEdge: number;  // cap on the shorter edge. 0 = no scaling, 720, 1080, etc.
 }
 
 export interface AudioCompressionOptions {

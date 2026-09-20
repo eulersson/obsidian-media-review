@@ -40,7 +40,7 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl('h3', { text: 'Image compression defaults' });
+		new Setting(containerEl).setName('Image compression defaults').setHeading();
 
 		new Setting(containerEl)
 			.setName('Output format')
@@ -82,7 +82,7 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 					}
 				}));
 
-		containerEl.createEl('h3', { text: 'Video compression defaults' });
+		new Setting(containerEl).setName('Video compression defaults').setHeading();
 
 		new Setting(containerEl)
 			.setName('CRF (quality)')
@@ -136,7 +136,7 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('h3', { text: 'Audio compression defaults' });
+		new Setting(containerEl).setName('Audio compression defaults').setHeading();
 
 		new Setting(containerEl)
 			.setName('Bitrate')
@@ -163,7 +163,7 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('h3', { text: 'External tools' });
+		new Setting(containerEl).setName('External tools').setHeading();
 
 		new Setting(containerEl)
 			.setName('ffmpeg path')

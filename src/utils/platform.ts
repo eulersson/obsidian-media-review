@@ -82,5 +82,10 @@ async function testBinary(path: string): Promise<boolean> {
 }
 
 export function getVaultBasePath(app: import('obsidian').App): string {
-	return (app.vault.adapter as any).basePath as string;
+	// FileSystemAdapter.getBasePath() is desktop-only and absent from the public types.
+	const adapter = app.vault.adapter as { basePath?: string };
+	if (typeof adapter.basePath !== 'string') {
+		throw new Error('Vault base path is unavailable (desktop-only feature)');
+	}
+	return adapter.basePath;
 }

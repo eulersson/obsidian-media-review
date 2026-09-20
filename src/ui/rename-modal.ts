@@ -1,7 +1,7 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import type MediaReviewPlugin from '../main';
 import type { MediaFile, SuffixMode } from '../types';
-import { getMediaFiles } from '../utils/files';
+import { getMediaFiles, errorMessage } from '../utils/files';
 import { createPaginatedFileList, createSelectAllBar, setAllCheckboxes } from './components';
 
 export class RenameModal extends Modal {
@@ -75,7 +75,7 @@ export class RenameModal extends Modal {
 			text: 'Rename selected',
 			cls: 'mod-cta',
 		});
-		renameBtn.addEventListener('click', () => this.executeRename());
+		renameBtn.addEventListener('click', () => { void this.executeRename(); });
 	}
 
 	onClose(): void {
@@ -182,7 +182,7 @@ export class RenameModal extends Modal {
 				await this.app.fileManager.renameFile(mf.file, newPath);
 				count++;
 			} catch (e) {
-				new Notice(`Failed to rename "${mf.name}": ${e}`);
+				new Notice(`Failed to rename "${mf.name}": ${errorMessage(e)}`);
 			}
 		}
 

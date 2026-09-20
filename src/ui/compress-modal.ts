@@ -1,7 +1,7 @@
 import { App, Modal, Notice, Setting, TFile } from 'obsidian';
 import type MediaReviewPlugin from '../main';
 import type { AudioCompressionOptions, CompressionOptions, MediaFile, OutputFormat, VideoCompressionOptions, VideoPreset } from '../types';
-import { getMediaFiles, formatFileSize } from '../utils/files';
+import { getMediaFiles, formatFileSize, errorMessage } from '../utils/files';
 import { compressImage, canCompress } from '../compression/image';
 import { compressVideo } from '../compression/video';
 import { compressAudio } from '../compression/audio';
@@ -110,7 +110,7 @@ export class CompressModal extends Modal {
 			text: 'Compress selected',
 			cls: 'mod-cta',
 		});
-		compressBtn.addEventListener('click', () => this.executeCompression(compressBtn, progress));
+		compressBtn.addEventListener('click', () => { void this.executeCompression(compressBtn, progress); });
 	}
 
 	onClose(): void {
@@ -349,7 +349,7 @@ export class CompressModal extends Modal {
 					);
 				}
 			} catch (e) {
-				new Notice(`Failed to compress "${mf.name}": ${e}`);
+				new Notice(`Failed to compress "${mf.name}": ${errorMessage(e)}`);
 			}
 		}
 

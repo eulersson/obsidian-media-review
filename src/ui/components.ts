@@ -126,7 +126,7 @@ export function createProgressBar(containerEl: HTMLElement): {
 	hide: () => void;
 } {
 	const wrapper = containerEl.createDiv({ cls: 'media-review-progress' });
-	wrapper.style.display = 'none';
+	wrapper.addClass('is-hidden');
 
 	const label = wrapper.createDiv({ cls: 'media-review-progress-label' });
 	const track = wrapper.createDiv({ cls: 'media-review-progress-track' });
@@ -135,12 +135,12 @@ export function createProgressBar(containerEl: HTMLElement): {
 	return {
 		el: wrapper,
 		update(percent: number, text: string) {
-			wrapper.style.display = '';
+			wrapper.removeClass('is-hidden');
 			label.setText(text);
 			fill.style.width = `${Math.min(100, Math.max(0, percent))}%`;
 		},
 		hide() {
-			wrapper.style.display = 'none';
+			wrapper.addClass('is-hidden');
 		},
 	};
 }

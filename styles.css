@@ -248,6 +248,10 @@
 	margin-bottom: 12px;
 }
 
+.media-review-progress.is-hidden {
+	display: none;
+}
+
 .media-review-progress-label {
 	font-size: 0.85em;
 	margin-bottom: 4px;

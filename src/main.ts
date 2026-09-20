@@ -14,11 +14,11 @@ export default class MediaReviewPlugin extends Plugin {
 		await this.loadSettings();
 
 		if (Platform.isDesktop) {
-			detectSystemTools(this.settings.ffmpegPath).then(tools => {
+			void detectSystemTools(this.settings.ffmpegPath).then(tools => {
 				this.ffmpegPath = tools.ffmpegPath;
 				this.magickPath = tools.magickPath;
 				this.sipsPath = tools.sipsPath;
-			});
+			}, () => { /* tools stay unset; modes needing them are disabled */ });
 		}
 
 		this.addCommand({

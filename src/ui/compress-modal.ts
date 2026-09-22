@@ -5,7 +5,7 @@ import { getMediaFiles, formatFileSize, errorMessage } from '../utils/files';
 import { compressImage, canCompress } from '../compression/image';
 import { compressVideo } from '../compression/video';
 import { compressAudio } from '../compression/audio';
-import { createPaginatedFileList, createSelectAllBar, createProgressBar, setAllCheckboxes } from './components';
+import { createPaginatedFileList, createSelectAllBar, createProgressBar, setAllCheckboxes, stopAllMedia } from './components';
 
 type Mode = 'images' | 'videos' | 'audio';
 
@@ -114,6 +114,7 @@ export class CompressModal extends Modal {
 	}
 
 	onClose(): void {
+		stopAllMedia(this.contentEl);
 		this.contentEl.empty();
 	}
 
@@ -283,7 +284,7 @@ export class CompressModal extends Modal {
 
 		createPaginatedFileList(
 			this.listEl, files, this.app,
-			this.selected, this.mode === 'images',
+			this.selected, true,
 		);
 	}
 

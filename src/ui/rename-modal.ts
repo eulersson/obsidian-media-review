@@ -2,7 +2,7 @@ import { App, Modal, Notice, Setting } from 'obsidian';
 import type MediaReviewPlugin from '../main';
 import type { MediaFile, SuffixMode } from '../types';
 import { getMediaFiles, errorMessage } from '../utils/files';
-import { createPaginatedFileList, createSelectAllBar, setAllCheckboxes } from './components';
+import { createPaginatedFileList, createSelectAllBar, setAllCheckboxes, stopAllMedia } from './components';
 
 export class RenameModal extends Modal {
 	private plugin: MediaReviewPlugin;
@@ -79,6 +79,7 @@ export class RenameModal extends Modal {
 	}
 
 	onClose(): void {
+		stopAllMedia(this.contentEl);
 		this.contentEl.empty();
 	}
 

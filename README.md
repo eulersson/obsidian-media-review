@@ -53,7 +53,7 @@ Run **Batch rename attachments** from the command palette.
 - **Sorted newest-first**: All file lists sort by modification date, newest on top
 - **Paginated lists**: 25 files per page with navigation controls
 - **Multi-select**: Checkboxes with Select all / Deselect all
-- **Image thumbnails**: Preview images inline in the file list
+- **Inline previews**: Images show a thumbnail; videos show a poster frame and audio a play button. Select either to expand a small player right in the list so you can identify a file before compressing or renaming it (only one plays at a time)
 - **Before/after feedback**: Each compressed file shows original size, new size, and bytes saved
 - **Settings tab**: Configure persistent defaults for all compression parameters
 

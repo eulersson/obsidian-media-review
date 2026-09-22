@@ -139,17 +139,20 @@
 	margin-bottom: 12px;
 }
 
+.media-review-file-entry {
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.media-review-file-entry:last-child {
+	border-bottom: none;
+}
+
 .media-review-file-row {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 6px 10px;
-	border-bottom: 1px solid var(--background-modifier-border);
 	cursor: pointer;
-}
-
-.media-review-file-row:last-child {
-	border-bottom: none;
 }
 
 .media-review-file-row:hover {
@@ -202,6 +205,68 @@
 .media-review-file-meta {
 	font-size: 0.8em;
 	color: var(--text-muted);
+}
+
+/* Inline video/audio preview */
+.media-review-preview-trigger {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	flex-shrink: 0;
+	border-radius: 4px;
+	overflow: hidden;
+	background: var(--background-secondary);
+	cursor: pointer;
+}
+
+.media-review-preview-trigger .media-review-thumbnail,
+.media-review-preview-trigger .media-review-icon {
+	display: block;
+	width: 40px;
+	height: 40px;
+	border-radius: 0;
+}
+
+.media-review-play-badge {
+	position: absolute;
+	right: 2px;
+	bottom: 2px;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.65);
+	color: #fff;
+	font-size: 8px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.media-review-file-entry.is-expanded .media-review-play-badge {
+	opacity: 0.4;
+}
+
+.media-review-player {
+	display: none;
+	padding: 0 10px 8px 60px;
+}
+
+.media-review-file-entry.is-expanded .media-review-player {
+	display: block;
+}
+
+.media-review-player-el {
+	width: 100%;
+	display: block;
+}
+
+video.media-review-player-el {
+	max-height: 260px;
+	background: #000;
+	border-radius: 4px;
 }
 
 /* Preview */

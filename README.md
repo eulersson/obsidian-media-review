@@ -20,7 +20,7 @@ Open the command palette and run **Compress media**, then switch to **Images** m
 
 Switch to **Videos** mode in the compress modal (requires ffmpeg installed on your system).
 
-- **CRF quality**: Constant rate factor slider (0-51, default 23 -- high quality for web)
+- **CRF quality**: Constant rate factor slider (0-51, default 30 -- small files for web; drop toward 23 for near-original quality)
 - **Encoding preset**: Speed vs compression tradeoff (veryfast to veryslow, default slow)
 - **Resolution scaling**: Downscale to 480p, 720p, or 1080p (default 720p). The cap applies to the shorter edge, so portrait videos are capped on width and landscape ones on height
 - **Audio bitrate**: AAC audio quality (default 128k)

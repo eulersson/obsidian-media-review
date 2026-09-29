@@ -178,7 +178,7 @@ export class CompressModal extends Modal {
 	private buildVideoOptions(el: HTMLElement): void {
 		new Setting(el)
 			.setName('CRF (quality)')
-			.setDesc('0-51. Lower = better quality. 23 is high quality for web.')
+			.setDesc('0-51. Lower = better quality. 30 keeps web videos small; 23 is near-original.')
 			.addSlider(slider => slider
 				.setLimits(0, 51, 1)
 				.setValue(this.videoOptions.crf)

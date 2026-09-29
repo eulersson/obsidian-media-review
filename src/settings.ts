@@ -19,7 +19,7 @@ export const DEFAULT_SETTINGS: MediaReviewSettings = {
 	imageQuality: 85,
 	imageMaxWidth: 1920,
 	imageOutputFormat: 'jpeg',
-	videoCrf: 23,
+	videoCrf: 30,
 	videoPreset: 'slow',
 	videoAudioBitrate: '128k',
 	videoMaxShortEdge: 720,
@@ -86,7 +86,7 @@ export class MediaReviewSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('CRF (quality)')
-			.setDesc('Constant rate factor (0-51). Lower = better quality. 23 is high quality for web.')
+			.setDesc('Constant rate factor (0-51). Lower = better quality. 30 keeps web videos small; use 23 for near-original quality.')
 			.addSlider(slider => slider
 				.setLimits(0, 51, 1)
 				.setValue(this.plugin.settings.videoCrf)
